@@ -1,0 +1,29 @@
+language: php
+
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+
+# faster builds on new travis setup not using sudo
+sudo: false
+
+services:
+  - mysql
+
+install:
+  - '[[ -z "$CI_USER_TOKEN" ]] || composer config github-oauth.github.com ${CI_USER_TOKEN};'
+  - travis_retry composer self-update && composer --version
+  - travis_retry composer update --prefer-dist --no-interaction
+  - git clone -q --depth=1 https://github.com/Codeception/phalcon-demo.git framework-tests
+  - git --git-dir framework-tests/.git log -n 1
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b v4.0.0-RC.3
+  - (cd cphalcon/build; bash ./install --phpize $(phpenv which phpize) --php-config $(phpenv which php-config) &>/dev/null && phpenv config-add ../tests/_ci/phalcon.ini &> /dev/null)
+  - travis_retry composer update -d framework-tests --no-dev --prefer-dist --no-interaction
+  - php ./vendor/bin/codecept build -c framework-tests
+
+before_script:
+  - 'mysql -e "CREATE DATABASE phalcon_demo CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"'
+  - 'cat framework-tests/schemas/phalcon_demo.sql | mysql phalcon_demo'
+script:
+  - php ./vendor/bin/codecept run functional -c framework-tests
