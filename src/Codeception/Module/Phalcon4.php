@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeception\Module;
 
 use Codeception\Configuration;
@@ -621,7 +622,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
             throw new ModuleException(__CLASS__, "Model $model does not exist");
         }
 
-        $record = new $model;
+        $record = new $model();
         if (!$record instanceof PhalconModel) {
             throw new ModuleException(__CLASS__, "Model $model is not instance of \\Phalcon\\Mvc\\Model");
         }

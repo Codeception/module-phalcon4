@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeception\Lib\Connector\Phalcon4;
 
 use Phalcon\Session\Adapter\AbstractAdapter;
