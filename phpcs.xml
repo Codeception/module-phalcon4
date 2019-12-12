@@ -4,6 +4,8 @@
     <arg value="-colors"/>
     <arg value="s"/>
     <arg value="p"/>
-    <rule ref="PSR12"></rule>
+    <rule ref="PSR12">
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+    </rule>
     <file>src/Codeception</file>
 </ruleset>
