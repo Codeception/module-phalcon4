@@ -50,6 +50,6 @@ jobs:
         run: |
           (cd public && nohup php -S $CODECEPTION_URL:$CODECEPTION_PORT > phalcon.log 2>&1 &)
           vendor/bin/codecept build
-          vendor/bin/codecept run
+          vendor/bin/codecept run unit
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
