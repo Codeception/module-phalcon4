@@ -26,4 +26,4 @@ before_script:
   - 'mysql -e "CREATE DATABASE phalcon_demo CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"'
   - 'cat framework-tests/schemas/phalcon_demo.sql | mysql phalcon_demo'
 script:
-  - php ./vendor/bin/codecept run functional -c framework-tests
+  - php ./vendor/bin/codecept run unit
