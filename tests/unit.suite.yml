@@ -8,9 +8,9 @@ modules:
         - Asserts
         - \Helper\Unit
         - Db:
-            dsn: 'mysql:host=127.0.0.1;dbname=phalcon;port=%port%'
-            user: root
-            password: password
+            dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%;port=%DB_PORT%'
+            user: %DB_USER%
+            password: %DB_PASSWORD%
             populate: no
             cleanup: true
             dump: 'tests/_data/structure.sql'

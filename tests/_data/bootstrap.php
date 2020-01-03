@@ -27,11 +27,11 @@ $di->set(
     function () {
         return new Mysql(
             [
-                'host'     => '127.0.0.1',
-                'port'     => getenv('PORT'),
-                'username' => 'root',
-                'password' => 'password',
-                'dbname'   => 'phalcon',
+                'host'     => getenv('DB_HOST'),
+                'port'     => getenv('DB_PORT'),
+                'username' => getenv('DB_USER'),
+                'password' => getenv('DB_PASSWORD'),
+                'dbname'   => getenv('DB_NAME'),
             ]
         );
     }
