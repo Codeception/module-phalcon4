@@ -58,7 +58,6 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Run Tests
         run: |
-          (cd public && nohup php -S $CODECEPTION_URL:$CODECEPTION_PORT > phalcon.log 2>&1 &)
           vendor/bin/codecept build
           vendor/bin/codecept run unit
         env:
