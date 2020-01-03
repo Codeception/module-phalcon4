@@ -9,8 +9,8 @@ modules:
         - \Helper\Unit
         - Db:
             dsn: 'mysql:host=127.0.0.1;dbname=phalcon'
-            user: 'root'
-            password: 'password'
+            user: root
+            password: password
             populate: no
             cleanup: true
             dump: 'tests/_data/structure.sql'
