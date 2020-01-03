@@ -75,7 +75,6 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $test = new Codeception\Test\Unit();
         $module->_before($test);
         $this->assertInstanceOf('Phalcon\Di', $module->di);
-        $this->assertInstanceOf('Phalcon\Di', $module->di);
     }
 
     public function testAfter()
@@ -104,6 +103,8 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $test = new Codeception\Test\Unit();
         $module->_before($test);
         $this->assertInstanceOf('Phalcon\Mvc\Micro', $module->getApplication());
+
+        $module->_after($test);
     }
 
     public function testSession()
@@ -116,6 +117,7 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $module->haveInSession($key, $value);
         $module->seeInSession($key, $value );
         $module->seeSessionHasValues([$key => $value]);
+        $module->_after($test);
     }
 
     public function testRecords()
@@ -135,6 +137,8 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
 
         $record = $module->grabRecord('Test', ['name' => 'phalcon']);
         $this->assertInstanceOf('Phalcon\Mvc\Model', $record);
+
+        $module->_after($test);
     }
 
     public function testContainerMethods()
@@ -144,6 +148,11 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $module->_before($test);
 
         $session = $module->grabServiceFromContainer('session');
-        $this->assertInstanceOf('session', $session);
+        $this->assertInstanceOf('Codeception\Lib\Connector\Phalcon4\MemorySession', $session);
+
+        $testService = $module->addServiceToContainer('test', function (){ return new \stdClass(); }, true);
+        $this->assertInstanceOf('stdClass', $module->grabServiceFromContainer('test'));
+        $this->assertInstanceOf('stdClass', $testService);
+        $module->_after($test);
     }
 }
