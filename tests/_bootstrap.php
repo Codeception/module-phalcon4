@@ -15,5 +15,6 @@ define("VENDOR_DIR", BASE_PATH . '/vendor');
 
 define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: 'testing');
 echo "ENV: " .APPLICATION_ENV.PHP_EOL;
+echo "DB_HOST: " .getenv('DB_HOST');
 
 //include('/project/vendor/webimp/codeception-performance-test/src/PerformanceTest.php');
