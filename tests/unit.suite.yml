@@ -8,7 +8,7 @@ modules:
         - Asserts
         - \Helper\Unit
         - Db:
-            dsn: 'mysql:host=127.0.0.1;dbname=phalcon'
+            dsn: 'mysql:host=127.0.0.1;dbname=phalcon;port=%port%'
             user: root
             password: password
             populate: no

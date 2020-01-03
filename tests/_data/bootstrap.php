@@ -28,6 +28,7 @@ $di->set(
         return new Mysql(
             [
                 'host'     => '127.0.0.1',
+                'port'     => getenv('PORT'),
                 'username' => 'root',
                 'password' => 'password',
                 'dbname'   => 'phalcon',
