@@ -35,4 +35,4 @@ jobs:
           PORT: ${{ job.services.mariadb.ports[3306] }}
         run: |
           vendor/bin/codecept build
-          vendor/bin/codecept run
+          vendor/bin/codecept run unit
