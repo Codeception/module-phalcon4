@@ -7,5 +7,5 @@ services:
     ports:
       - 3306:3306
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-      - MYSQL_DATABASE="phalcon_demo"
+      - MYSQL_DATABASE=phalcon
+      - MYSQL_ROOT_PASSWORD=password

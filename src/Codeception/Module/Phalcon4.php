@@ -6,6 +6,7 @@ use Codeception\Configuration;
 use Codeception\Exception\ModuleConfigException;
 use Codeception\Exception\ModuleException;
 use Codeception\Lib\Connector\Phalcon4 as PhalconConnector;
+use Codeception\Lib\Connector\Phalcon4\MemorySession as MemorySession;
 use Codeception\Lib\Framework;
 use Codeception\Lib\Interfaces\ActiveRecord;
 use Codeception\Lib\Interfaces\PartedModule;
@@ -88,7 +89,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
         'bootstrap'  => 'app/config/bootstrap.php',
         'cleanup'    => true,
         'savepoints' => true,
-        'session'    => PhalconConnector\MemorySession::class
+        'session'    => MemorySession::class
     ];
 
     /**
@@ -120,14 +121,11 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
         if (!file_exists($this->bootstrapFile)) {
             throw new ModuleConfigException(
                 __CLASS__,
-                "Bootstrap file does not exist in " . $this->config['bootstrap'] . "\n"
+                "Bootstrap file does not exist in " . $this->bootstrapFile . "\n"
                 . "Please create the bootstrap file that returns Application object\n"
                 . "And specify path to it with 'bootstrap' config\n\n"
                 . "Sample bootstrap: \n\n<?php\n"
-                . '$config = include __DIR__ . "/config.php";' . "\n"
-                . 'include __DIR__ . "/loader.php";' . "\n"
                 . '$di = new \Phalcon\DI\FactoryDefault();' . "\n"
-                . 'include __DIR__ . "/services.php";' . "\n"
                 . 'return new \Phalcon\Mvc\Application($di);'
             );
         }
@@ -322,7 +320,8 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
     public function haveRecord($model, $attributes = [])
     {
         $record = $this->getModelRecord($model);
-        $res = $record->save($attributes);
+        $record->assign($attributes);
+        $res = $record->save();
         $field = function ($field) {
             if (is_array($field)) {
                 return implode(', ', $field);
