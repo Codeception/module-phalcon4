@@ -4,7 +4,6 @@ use Codeception\Util\Autoload;
 use Codeception\Module\Phalcon4;
 use Codeception\Exception\ModuleConfigException;
 
-
 class Phalcon4ModuleTest extends \Codeception\Test\Unit
 {
     /**
