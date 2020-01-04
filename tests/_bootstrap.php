@@ -14,6 +14,9 @@ define("BASE_PATH", dirname(__DIR__ ) );
 define("VENDOR_DIR", BASE_PATH . '/vendor');
 
 define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: 'testing');
+$dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
+$dotenv->load();
+
 echo "ENV: " .APPLICATION_ENV.PHP_EOL;
 echo "DB_HOST: " .getenv('DB_HOST').":".getenv('DB_PORT').PHP_EOL;
 

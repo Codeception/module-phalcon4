@@ -9,7 +9,7 @@ modules:
         - \Helper\Unit
         - Db:
             dsn: 'mysql:host=%DB_HOST%;dbname=%DB_NAME%;port=%DB_PORT%'
-            user: '%DB_USER%'
+            user: '%DB_USERNAME%'
             password: '%DB_PASSWORD%'
             populate: no
             cleanup: true

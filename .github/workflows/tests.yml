@@ -14,8 +14,6 @@ jobs:
       DB_NAME: phalcon
       DB_USERNAME: root
       DB_PASSWORD: password
-      CODECEPTION_URL: 127.0.0.1
-      CODECEPTION_PORT: 8888
     services:
       mysql:
         image: mysql:5.7

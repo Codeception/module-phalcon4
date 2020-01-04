@@ -9,3 +9,5 @@ bootstrap: _bootstrap.php
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+params:
+    - .env
