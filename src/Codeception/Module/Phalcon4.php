@@ -520,7 +520,6 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
         if ($params) {
             $urlParams += $params;
         }
-
         $this->amOnPage($url->get($urlParams, null, true));
     }
 

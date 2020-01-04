@@ -3,8 +3,10 @@
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
 use Phalcon\Mvc\Application;
+use Phalcon\Mvc\View;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Db\Adapter\Pdo\Mysql;
+use Phalcon\Url as UrlProvider;
 
 $di = new FactoryDefault();
 $di->setShared(
@@ -37,4 +39,31 @@ $di->set(
         );
     }
 );
+
+/**
+ * Setting the View
+ */
+$di->setShared('view', function () {
+    $view = new View();
+    return $view;
+});
+
+/**
+ * The URL component is used to generate all kind of urls in the application
+ */
+$di->setShared('url', function () {
+    $url = new UrlProvider();
+    $url->setBaseUri('/');
+    return $url;
+});
+
+
+$router = $di->getRouter();
+
+$router->add('/contact', [
+    'controller' => 'App\Controllers\Contact',
+    'action'     => 'index'
+])->setName('front.contact');
+
+
 return new Application($di);

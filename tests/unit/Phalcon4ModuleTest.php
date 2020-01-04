@@ -4,6 +4,7 @@ use Codeception\Util\Autoload;
 use Codeception\Module\Phalcon4;
 use Codeception\Exception\ModuleConfigException;
 
+
 class Phalcon4ModuleTest extends \Codeception\Test\Unit
 {
     /**
@@ -133,14 +134,14 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $test = new Codeception\Test\Unit();
         $module->_before($test);
 
-        $module->haveRecord('Test', ['name' => 'phalcon']);
-        $module->seeRecord('Test', ['name' => 'phalcon']);
-        $module->seeNumberOfRecords('Test', 1);
-        $module->haveRecord('Test', ['name' => 'phalcon']);
-        $module->seeNumberOfRecords('Test', 2);
-        $module->dontSeeRecord('Test', ['name' => 'wordpress']);
+        $module->haveRecord('App\Models\Test', ['name' => 'phalcon']);
+        $module->seeRecord('App\Models\Test', ['name' => 'phalcon']);
+        $module->seeNumberOfRecords('App\Models\Test', 1);
+        $module->haveRecord('App\Models\Test', ['name' => 'phalcon']);
+        $module->seeNumberOfRecords('App\Models\Test', 2);
+        $module->dontSeeRecord('App\Models\Test', ['name' => 'wordpress']);
 
-        $record = $module->grabRecord('Test', ['name' => 'phalcon']);
+        $record = $module->grabRecord('App\Models\Test', ['name' => 'phalcon']);
         $this->assertInstanceOf('Phalcon\Mvc\Model', $record);
 
         $module->_after($test);
@@ -155,11 +156,24 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $session = $module->grabServiceFromContainer('session');
         $this->assertInstanceOf('Codeception\Lib\Connector\Phalcon4\MemorySession', $session);
 
-        $testService = $module->addServiceToContainer('test', function () {
+        $testService = $module->addServiceToContainer('App\Models\Test', function () {
             return new \stdClass();
         }, true);
-        $this->assertInstanceOf('stdClass', $module->grabServiceFromContainer('test'));
+        $this->assertInstanceOf('stdClass', $module->grabServiceFromContainer('App\Models\Test'));
         $this->assertInstanceOf('stdClass', $testService);
+        $module->_after($test);
+    }
+
+    public function testRoutes()
+    {
+        require_once codecept_data_dir('controllers/ContactController.php');
+
+        $module = $this->getPhalconModule();
+        $test = new Codeception\Test\Unit();
+        $module->_before($test);
+
+        $module->amOnRoute('front.contact');
+        $module->seeCurrentRouteIs('front.contact');
         $module->_after($test);
     }
 }

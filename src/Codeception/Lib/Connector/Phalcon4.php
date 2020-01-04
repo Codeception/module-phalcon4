@@ -120,20 +120,20 @@ class Phalcon4 extends Client
         $headers = $response->getHeaders();
         $status = (int) $headers->get('Status');
 
-        $headersProperty = new ReflectionProperty($headers, '_headers');
+        $headersProperty = new ReflectionProperty($headers, 'headers');
         $headersProperty->setAccessible(true);
         $headers = $headersProperty->getValue($headers);
         if (!is_array($headers)) {
             $headers = [];
         }
 
-        $cookiesProperty = new ReflectionProperty($di['cookies'], '_cookies');
+        $cookiesProperty = new ReflectionProperty($di['cookies'], 'cookies');
         $cookiesProperty->setAccessible(true);
         $cookies = $cookiesProperty->getValue($di['cookies']);
         if (is_array($cookies)) {
-            $restoredProperty = new ReflectionProperty('\Phalcon\Http\Cookie', '_restored');
+            $restoredProperty = new ReflectionProperty('\Phalcon\Http\Cookie', 'restored');
             $restoredProperty->setAccessible(true);
-            $valueProperty = new ReflectionProperty('\Phalcon\Http\Cookie', '_value');
+            $valueProperty = new ReflectionProperty('\Phalcon\Http\Cookie', 'value');
             $valueProperty->setAccessible(true);
             foreach ($cookies as $name => $cookie) {
                 if (!$restoredProperty->getValue($cookie)) {
