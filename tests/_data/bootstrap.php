@@ -1,4 +1,5 @@
 <?php
+
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
 use Phalcon\Mvc\Application;

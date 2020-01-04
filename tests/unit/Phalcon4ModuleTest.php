@@ -13,15 +13,20 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
 
     protected function _setUp()
     {
-        Autoload::addNamespace('Codeception\Module', BASE_PATH . '/src/Codeception/Module');
-        Autoload::addNamespace('Codeception\Lib\Connector\Phalcon4', BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4');
+        Autoload::addNamespace(
+            'Codeception\Module',
+            BASE_PATH . '/src/Codeception/Module'
+        );
+        Autoload::addNamespace(
+            'Codeception\Lib\Connector\Phalcon4',
+            BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4'
+        );
         require_once BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4.php';
         require_once BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4/MemorySession.php';
     }
 
     protected function _before()
     {
-
     }
 
     protected function _after()
@@ -115,7 +120,7 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $key = "phalcon";
         $value = "Rocks!";
         $module->haveInSession($key, $value);
-        $module->seeInSession($key, $value );
+        $module->seeInSession($key, $value);
         $module->seeSessionHasValues([$key => $value]);
         $module->_after($test);
     }
@@ -150,7 +155,9 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $session = $module->grabServiceFromContainer('session');
         $this->assertInstanceOf('Codeception\Lib\Connector\Phalcon4\MemorySession', $session);
 
-        $testService = $module->addServiceToContainer('test', function (){ return new \stdClass(); }, true);
+        $testService = $module->addServiceToContainer('test', function () {
+            return new \stdClass();
+        }, true);
         $this->assertInstanceOf('stdClass', $module->grabServiceFromContainer('test'));
         $this->assertInstanceOf('stdClass', $testService);
         $module->_after($test);

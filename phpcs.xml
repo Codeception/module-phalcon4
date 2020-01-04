@@ -6,6 +6,9 @@
     <arg value="p"/>
     <rule ref="PSR12">
         <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
     </rule>
     <file>src/Codeception</file>
+    <file>tests</file>
 </ruleset>

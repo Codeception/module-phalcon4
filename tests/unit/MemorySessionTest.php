@@ -12,7 +12,10 @@ class MemorySessionTest extends \Codeception\Test\Unit
 
     protected function _setUp()
     {
-        Autoload::addNamespace('Codeception\Lib\Connector\Phalcon4', BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4');
+        Autoload::addNamespace(
+            'Codeception\Lib\Connector\Phalcon4',
+            BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4'
+        );
     }
 
     protected function _before()
@@ -71,6 +74,4 @@ class MemorySessionTest extends \Codeception\Test\Unit
         $session->destroy($session->getId());
         $this->assertNull($session->user);
     }
-
-
 }
