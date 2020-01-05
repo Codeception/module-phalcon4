@@ -209,7 +209,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
                     break;
                 }
             }
-            if ($db){
+            if ($db) {
                 $db->close();
             }
         }
