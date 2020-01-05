@@ -198,7 +198,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
     {
         if ($this->config['cleanup'] && isset($this->di['db'])) {
             $db = $this->di['db'];
-            while ($db->isUnderTransaction()) {
+            while (($db) && $db->isUnderTransaction()) {
                 $level = $db->getTransactionLevel();
                 try {
                     $db->rollback(true);
