@@ -197,18 +197,19 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
     public function _after(TestInterface $test)
     {
         if ($this->config['cleanup'] && isset($this->di['db'])) {
-            while ($this->di['db']->isUnderTransaction()) {
-                $level = $this->di['db']->getTransactionLevel();
+            $db = $this->di['db'];
+            while ($db->isUnderTransaction()) {
+                $level = $db->getTransactionLevel();
                 try {
-                    $this->di['db']->rollback(true);
+                    $db->rollback(true);
                     $this->debugSection('Database', 'Transaction cancelled; all changes reverted.');
                 } catch (PDOException $e) {
                 }
-                if ($level == $this->di['db']->getTransactionLevel()) {
+                if ($level == $db->getTransactionLevel()) {
                     break;
                 }
             }
-            $this->di['db']->close();
+            $db->close();
         }
         $this->di = null;
         Di::reset();
