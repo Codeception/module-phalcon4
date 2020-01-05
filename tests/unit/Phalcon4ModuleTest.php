@@ -1,6 +1,5 @@
 <?php
 
-use Codeception\Util\Autoload;
 use Codeception\Module\Phalcon4;
 use Codeception\Exception\ModuleConfigException;
 
@@ -13,16 +12,6 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
 
     protected function _setUp()
     {
-        Autoload::addNamespace(
-            'Codeception\Module',
-            BASE_PATH . '/src/Codeception/Module'
-        );
-        Autoload::addNamespace(
-            'Codeception\Lib\Connector\Phalcon4',
-            BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4'
-        );
-        require_once BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4.php';
-        require_once BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4/MemorySession.php';
     }
 
     protected function _before()
@@ -127,20 +116,18 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
 
     public function testRecords()
     {
-        require_once codecept_data_dir('models/test.php');
-
         $module = $this->getPhalconModule();
         $test = new Codeception\Test\Unit();
         $module->_before($test);
 
-        $module->haveRecord('App\Models\Test', ['name' => 'phalcon']);
-        $module->seeRecord('App\Models\Test', ['name' => 'phalcon']);
-        $module->seeNumberOfRecords('App\Models\Test', 1);
-        $module->haveRecord('App\Models\Test', ['name' => 'phalcon']);
-        $module->seeNumberOfRecords('App\Models\Test', 2);
-        $module->dontSeeRecord('App\Models\Test', ['name' => 'wordpress']);
+        $module->haveRecord('App\Models\Articles', ['title' => 'phalcon']);
+        $module->seeRecord('App\Models\Articles', ['title' => 'phalcon']);
+        $module->seeNumberOfRecords('App\Models\Articles', 1);
+        $module->haveRecord('App\Models\Articles', ['title' => 'phalcon']);
+        $module->seeNumberOfRecords('App\Models\Articles', 2);
+        $module->dontSeeRecord('App\Models\Articles', ['title' => 'wordpress']);
 
-        $record = $module->grabRecord('App\Models\Test', ['name' => 'phalcon']);
+        $record = $module->grabRecord('App\Models\Articles', ['title' => 'phalcon']);
         $this->assertInstanceOf('Phalcon\Mvc\Model', $record);
 
         $module->_after($test);
@@ -155,24 +142,22 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $session = $module->grabServiceFromContainer('session');
         $this->assertInstanceOf('Codeception\Lib\Connector\Phalcon4\MemorySession', $session);
 
-        $testService = $module->addServiceToContainer('App\Models\Test', function () {
+        $testService = $module->addServiceToContainer('std', function () {
             return new \stdClass();
         }, true);
-        $this->assertInstanceOf('stdClass', $module->grabServiceFromContainer('App\Models\Test'));
+        $this->assertInstanceOf('stdClass', $module->grabServiceFromContainer('std'));
         $this->assertInstanceOf('stdClass', $testService);
         $module->_after($test);
     }
 
     public function testRoutes()
     {
-        require_once codecept_data_dir('controllers/ContactController.php');
-
         $module = $this->getPhalconModule();
         $test = new Codeception\Test\Unit();
         $module->_before($test);
 
-        $module->amOnRoute('front.contact');
-        $module->seeCurrentRouteIs('front.contact');
+        $module->amOnRoute('front.index');
+        $module->seeCurrentRouteIs('front.index');
         $module->_after($test);
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+use Codeception\Util\Autoload;
+
 // This is global bootstrap for autoloading
 
 error_reporting(-1);
@@ -19,3 +22,17 @@ $dotenv->load();
 
 echo "ENV: " . APPLICATION_ENV . PHP_EOL;
 echo "DB_HOST: " . getenv('DB_HOST') . ":" . getenv('DB_PORT') . PHP_EOL;
+
+
+Autoload::addNamespace(
+    'Codeception\Module',
+    BASE_PATH . '/src/Codeception/Module'
+);
+Autoload::addNamespace(
+    'Codeception\Lib\Connector\Phalcon4',
+    BASE_PATH . '/src/Codeception/Lib/Connector/Phalcon4'
+);
+Autoload::addNamespace(
+    'App',
+    BASE_PATH . '/tests/_data/App'
+);

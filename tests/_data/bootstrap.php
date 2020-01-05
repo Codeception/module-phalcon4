@@ -7,6 +7,8 @@ use Phalcon\Mvc\View;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Url as UrlProvider;
+use Phalcon\Mvc\View\Engine\Volt;
+use Phalcon\Loader;
 
 $di = new FactoryDefault();
 $di->setShared(
@@ -43,10 +45,47 @@ $di->set(
 /**
  * Setting the View
  */
-$di->setShared('view', function () {
+$di->setShared('view', function () use ($di) {
     $view = new View();
+//    $view->setViewsDir(BASE_PATH . '/_data/App/Views/');
+//    $view->registerEngines(
+//        [
+//            ".volt"  => "voltService"
+//        ]
+//    );
+//    $eventsManager = $di->get('eventsManager');
+//    $eventsManager->attach('view', function ($event, $view) use ($di) {
+//        /**
+//         * @var \Phalcon\Events\Event $event
+//         * @var \Phalcon\Mvc\View $view
+//         */
+//        if ($event->getType() == 'notFoundView') {
+//            $message = sprintf('View not found - %s', $view->getActiveRenderPath());
+//            throw new Exception($message);
+//        }
+//    });
+//    $view->setEventsManager($eventsManager);
     return $view;
 });
+
+/**
+ * Volt Service
+ */
+$di->set(
+    'voltService',
+    function ($view) use ($di) {
+        $volt = new Volt($view, $di);
+
+        $volt->setOptions(
+            [
+                'compiledPath'      => BASE_PATH . '/_output/compiled-templates/',
+                'compiledExtension' => '.compiled',
+            ]
+        );
+
+        return $volt;
+    }
+);
 
 /**
  * The URL component is used to generate all kind of urls in the application
@@ -60,10 +99,9 @@ $di->setShared('url', function () {
 
 $router = $di->getRouter();
 
-$router->add('/contact', [
-    'controller' => 'App\Controllers\Contact',
+$router->add('/', [
+    'controller' => 'App\Controllers\Index',
     'action'     => 'index'
-])->setName('front.contact');
-
+])->setName('front.index');
 
 return new Application($di);

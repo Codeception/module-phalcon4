@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use Phalcon\Mvc\Controller;
 
-class ContactController extends Controller
+class IndexController extends Controller
 {
     public function indexAction()
     {
