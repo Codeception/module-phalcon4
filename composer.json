@@ -1,0 +1,35 @@
+{
+    "name":"codeception/module-phalcon4",
+    "description":"Codeception module for Phalcon 4 framework",
+    "keywords":["codeception", "phalcon"],
+    "homepage":"https://codeception.com/",
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Ruud Boon"
+        }
+    ],
+    "minimum-stability": "RC",
+
+    "require": {
+        "php": ">=7.2.0 <8.0",
+        "codeception/lib-innerbrowser": "dev-master | ^1.0",
+        "codeception/codeception": "4.0.x-dev | ^4.0",
+        "vlucas/phpdotenv": "^4.1"
+    },
+    "require-dev": {
+        "codeception/util-robohelpers": "dev-master",
+        "codeception/module-asserts": "dev-master | ^1.0",
+        "codeception/module-phpbrowser": "dev-master | ^1.0",
+        "squizlabs/php_codesniffer": "^3.4",
+        "vimeo/psalm": "^3.6",
+        "codeception/module-db": "^1.0"
+    },
+    "autoload":{
+        "classmap": ["src/"]
+    },
+    "config": {
+        "classmap-authoritative": true
+    }
+}
