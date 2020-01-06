@@ -3,6 +3,5 @@ create table articles
 (
     id int auto_increment,
     title varchar(255) null,
-    constraint test_pk
-        primary key (id)
+    PRIMARY KEY (`id`)
 );
