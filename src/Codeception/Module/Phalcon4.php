@@ -165,25 +165,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
             $this->di['db']->begin();
             $this->debugSection('Database', 'Transaction started');
         }
-
-        // localize
-        $bootstrap = $this->bootstrapFile;
-        $this->client->setApplication(function () use ($bootstrap) {
-            $currentDi = Di::getDefault();
-            /** @noinspection PhpIncludeInspection */
-            $application = require $bootstrap;
-            $di = $application->getDI();
-            if ($currentDi->has('db')) {
-                $di['db'] = $currentDi['db'];
-            }
-            if ($currentDi->has('session')) {
-                $di['session'] = $currentDi['session'];
-            }
-            if ($di->has('cookies')) {
-                $di['cookies']->useEncryption(false);
-            }
-            return $application;
-        });
+        $this->client->setApplication($application);
     }
 
     /**
