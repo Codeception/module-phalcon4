@@ -97,7 +97,7 @@ $di->setShared('url', function () {
 });
 
 
-$di->set('datetime', function() {
+$di->set('datetime', function () {
     return new DateTime();
 });
 
