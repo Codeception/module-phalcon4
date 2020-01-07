@@ -150,6 +150,30 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $module->_after($test);
     }
 
+    public function testReplaceService()
+    {
+        $module = $this->getPhalconModule();
+        $test = new Codeception\Test\Unit();
+        $module->_before($test);
+        $diHash = spl_object_hash($module->di);
+
+        $datetime = $module->grabServiceFromContainer('datetime');
+        $this->assertInstanceOf('DateTime', $datetime);
+        $this->assertEquals($diHash, spl_object_hash($module->di));
+
+        $std = $module->addServiceToContainer('datetime', function () {
+            return new \stdClass();
+        }, false);
+        $this->assertInstanceOf('stdClass', $std);
+        $this->assertInstanceOf('stdClass', $module->grabServiceFromContainer('datetime'));
+        $this->assertEquals($diHash, spl_object_hash($module->di));
+        $module->amOnPage('/datetime/spl');
+        $module->see($diHash);
+        $module->amOnPage('/datetime');
+        $module->see('class: stdClass');
+        $module->_after($test);
+    }
+
     public function testRoutes()
     {
         $module = $this->getPhalconModule();

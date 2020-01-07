@@ -97,11 +97,27 @@ $di->setShared('url', function () {
 });
 
 
+$di->set('datetime', function() {
+    return new DateTime();
+});
+
+
 $router = $di->getRouter();
 
 $router->add('/', [
     'controller' => 'App\Controllers\Index',
     'action'     => 'index'
 ])->setName('front.index');
+
+$router->add('/datetime', [
+    'controller' => 'App\Controllers\Datetime',
+    'action'     => 'index'
+])->setName('front.datetime');
+
+$router->add('/datetime/spl', [
+    'controller' => 'App\Controllers\Datetime',
+    'action'     => 'spl'
+])->setName('front.spl');
+
 
 return new Application($di);
