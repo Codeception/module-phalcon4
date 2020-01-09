@@ -30,7 +30,7 @@
         "codeception/util-robohelpers": "dev-master",
         "vlucas/phpdotenv": "^4.1",
         "squizlabs/php_codesniffer": "^3.4",
-        "vimeo/psalm": "^3.6",
+        "vimeo/psalm": "^3.6"
     },
     "autoload":{
         "classmap": ["src/"]
