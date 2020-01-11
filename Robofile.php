@@ -13,7 +13,7 @@ class RoboFile extends \Robo\Tasks
     {
         $className = Phalcon4::class;
         $classPath = str_replace('\\', '/', $className);
-        $source = "https://github.com/Codeception/module-phalcon/tree/master/src/$classPath.php";
+        $source = "https://github.com/Codeception/module-phalcon4/tree/master/src/$classPath.php";
         $sourceMessage = '<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="' . $source . '">Help us to improve documentation. Edit module reference</a></div>';
         $documentationFile = 'documentation.md';
         $this->generateDocumentationForClass($className, $documentationFile, $sourceMessage);

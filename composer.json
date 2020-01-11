@@ -20,17 +20,17 @@
     "require": {
         "php": ">=7.2.0 <8.0",
         "ext-phalcon": ">=4",
-        "codeception/lib-innerbrowser": "^1.0",
         "codeception/codeception": "^4.0",
-        "vlucas/phpdotenv": "^4.1"
+        "codeception/lib-innerbrowser": "^1.0",
+        "codeception/module-asserts": "^1.0",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-db": "^1.0"
     },
     "require-dev": {
         "codeception/util-robohelpers": "dev-master",
-        "codeception/module-asserts": "^1.0",
-        "codeception/module-phpbrowser": "^1.0",
+        "vlucas/phpdotenv": "^4.1",
         "squizlabs/php_codesniffer": "^3.4",
-        "vimeo/psalm": "^3.6",
-        "codeception/module-db": "^1.0"
+        "vimeo/psalm": "^3.6"
     },
     "autoload":{
         "classmap": ["src/"]
