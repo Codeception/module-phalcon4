@@ -45,4 +45,4 @@ jobs:
       run: |
         php -r "file_exists('.env') || copy('.env.example', '.env');"
         php ./vendor/bin/codecept build
-        php ./vendor/bin/codecept run
+        php ./vendor/bin/codecept run unit
