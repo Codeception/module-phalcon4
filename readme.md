@@ -1,6 +1,6 @@
 # Codeception module for Phalcon framework
 
-[![Build Status](https://travis-ci.org/Codeception/module-phalcon.svg?branch=master)](https://travis-ci.org/Codeception/module-phalcon)
+![Build Status](https://github.com/Codeception/module-phalcon4/workflows/CI/badge.svg)
 
 ## Installation
 
