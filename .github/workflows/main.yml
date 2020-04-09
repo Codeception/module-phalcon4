@@ -10,8 +10,9 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-            MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: phalcon_demo
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: phalcon
         ports:
           - 3306:3306
         options: >-
@@ -21,7 +22,7 @@ jobs:
           --health-retries 5
     strategy:
       matrix:
-        php: [7.2, 7.3, 7.4]
+        php: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4]
 
     steps:
     - name: Checkout code
@@ -34,13 +35,6 @@ jobs:
         extensions: mbstring, php-xml, ext-dom, phalcon4, pdo, mysql
         coverage: none
 
-    - name: Install Phalcon Demo
-      run: |
-        git clone https://github.com/Codeception/phalcon-demo.git framework-tests
-        git --git-dir framework-tests/.git log -n 1
-        composer update -d framework-tests --no-dev --prefer-dist --no-interaction
-        sed -i -e "s/localhost/127.0.0.1/g" framework-tests/app/config/config.ini
-        sed -i -e "s/password =/password = password/g" framework-tests/app/config/config.ini
     - name: Validate composer.json and composer.lock
       run: composer validate
 
@@ -49,10 +43,6 @@ jobs:
 
     - name: Run test suite
       run: |
-        cat framework-tests/schemas/phalcon_demo.sql | mysql phalcon_demo -uroot -ppassword -h 127.0.0.1
-        php ./vendor/bin/codecept build -c framework-tests
-        php ./vendor/bin/codecept run functional -c framework-tests
-      env:
-        DB_HOST: 127.0.0.1
-        DB_USERNAME: root
-        DB_PASSWORD: password
+        php -r "file_exists('.env') || copy('.env.example', '.env');"
+        php ./vendor/bin/codecept build
+        php ./vendor/bin/codecept run
