@@ -10,7 +10,6 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: phalcon
         ports:
@@ -44,5 +43,5 @@ jobs:
     - name: Run test suite
       run: |
         php -r "file_exists('.env') || copy('.env.example', '.env');"
-        php ./vendor/bin/codecept build
-        php ./vendor/bin/codecept run unit
+        php vendor/bin/codecept build
+        php vendor/bin/codecept run unit
