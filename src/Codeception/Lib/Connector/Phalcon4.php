@@ -3,17 +3,17 @@
 namespace Codeception\Lib\Connector;
 
 use Closure;
+use Codeception\Lib\Connector\Shared\PhpSuperGlobalsConverter;
+use Codeception\Util\Stub;
 use Phalcon\Di;
 use Phalcon\Http;
-use RuntimeException;
-use ReflectionProperty;
-use Codeception\Util\Stub;
 use Phalcon\Mvc\Application;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Phalcon\Mvc\Micro as MicroApplication;
+use ReflectionProperty;
+use RuntimeException;
+use Symfony\Component\BrowserKit\AbstractBrowser as Client;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\BrowserKit\Response;
-use Codeception\Lib\Connector\Shared\PhpSuperGlobalsConverter;
 
 class Phalcon4 extends Client
 {
@@ -110,6 +110,9 @@ class Phalcon4 extends Client
         Di::reset();
         Di::setDefault($di);
 
+        if ($di->has('request')) {
+            $di->remove('request');
+        }
         $di['request'] = Stub::construct($phRequest, [], ['getRawBody' => $request->getContent()]);
 
         $response = $application->handle($pathString);
