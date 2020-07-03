@@ -231,7 +231,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
     public function haveInSession($key, $val)
     {
         $this->di->get('session')->set($key, $val);
-        $this->debugSection('Session', json_encode($this->di['session']->toArray()));
+        $this->debugSection('Session', json_encode($this->di['session']->getAdapter()->toArray()));
     }
 
     /**
@@ -250,7 +250,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      */
     public function seeInSession($key, $value = null)
     {
-        $this->debugSection('Session', json_encode($this->di['session']->toArray()));
+        $this->debugSection('Session', json_encode($this->di['session']->getAdapter()->toArray()));
 
         if (is_array($key)) {
             $this->seeSessionHasValues($key);
