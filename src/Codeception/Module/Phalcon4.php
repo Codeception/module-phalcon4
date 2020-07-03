@@ -19,6 +19,7 @@ use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Mvc\RouterInterface;
+use Phalcon\Session\Manager;
 use Phalcon\Url;
 
 /**
@@ -150,8 +151,15 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
         Di::setDefault($this->di);
 
         if ($this->di->has('session')) {
+            /** @var Manager $manager */
+            $manager = $this->di->get(Manager::class);
+            $manager->setAdapter(
+                $this->di->get($this->config['session'])
+            );
+            $manager->start();
+
             // Destroy existing sessions of previous tests
-            $this->di['session'] = $this->di->get($this->config['session']);
+            $this->di['session'] = $manager;
         }
 
         if ($this->di->has('cookies')) {
