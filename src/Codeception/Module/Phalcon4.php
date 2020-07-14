@@ -12,6 +12,7 @@ use Codeception\Lib\Interfaces\ActiveRecord;
 use Codeception\Lib\Interfaces\PartedModule;
 use Codeception\TestInterface;
 use Codeception\Util\ReflectionHelper;
+use Exception;
 use PDOException;
 use Phalcon\Di;
 use Phalcon\Di\Injectable;
@@ -19,7 +20,7 @@ use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Mvc\RouterInterface;
-use Phalcon\Session\Manager;
+use Codeception\Lib\Connector\Phalcon4\SessionManager;
 use Phalcon\Url;
 
 /**
@@ -152,11 +153,10 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
 
         if ($this->di->has('session')) {
             /** @var Manager $manager */
-            $manager = $this->di->get(Manager::class);
+            $manager = $this->di->get(SessionManager::class);
             $manager->setAdapter(
                 $this->di->get($this->config['session'])
             );
-            $manager->start();
 
             // Destroy existing sessions of previous tests
             $this->di['session'] = $manager;
