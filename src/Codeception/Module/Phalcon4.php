@@ -12,6 +12,7 @@ use Codeception\Lib\Interfaces\ActiveRecord;
 use Codeception\Lib\Interfaces\PartedModule;
 use Codeception\TestInterface;
 use Codeception\Util\ReflectionHelper;
+use Exception;
 use PDOException;
 use Phalcon\Di;
 use Phalcon\Di\Injectable;
@@ -19,6 +20,7 @@ use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Mvc\RouterInterface;
+use Codeception\Lib\Connector\Phalcon4\SessionManager;
 use Phalcon\Url;
 
 /**
@@ -150,8 +152,14 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
         Di::setDefault($this->di);
 
         if ($this->di->has('session')) {
+            /** @var Manager $manager */
+            $manager = $this->di->get(SessionManager::class);
+            $manager->setAdapter(
+                $this->di->get($this->config['session'])
+            );
+
             // Destroy existing sessions of previous tests
-            $this->di['session'] = $this->di->get($this->config['session']);
+            $this->di['session'] = $manager;
         }
 
         if ($this->di->has('cookies')) {
@@ -223,7 +231,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
     public function haveInSession($key, $val)
     {
         $this->di->get('session')->set($key, $val);
-        $this->debugSection('Session', json_encode($this->di['session']->toArray()));
+        $this->debugSection('Session', json_encode($this->di['session']->getAdapter()->toArray()));
     }
 
     /**
@@ -242,7 +250,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      */
     public function seeInSession($key, $value = null)
     {
-        $this->debugSection('Session', json_encode($this->di['session']->toArray()));
+        $this->debugSection('Session', json_encode($this->di['session']->getAdapter()->toArray()));
 
         if (is_array($key)) {
             $this->seeSessionHasValues($key);

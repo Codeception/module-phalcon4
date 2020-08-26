@@ -140,7 +140,8 @@ class Phalcon4ModuleTest extends \Codeception\Test\Unit
         $module->_before($test);
 
         $session = $module->grabServiceFromContainer('session');
-        $this->assertInstanceOf('Codeception\Lib\Connector\Phalcon4\MemorySession', $session);
+        $this->assertInstanceOf('Phalcon\Session\Manager', $session);
+        $this->assertInstanceOf('Codeception\Lib\Connector\Phalcon4\MemorySession', $session->getAdapter());
 
         $testService = $module->addServiceToContainer('std', function () {
             return new \stdClass();

@@ -295,4 +295,27 @@ class MemorySession extends AbstractAdapter
     {
         return md5(time());
     }
+
+    /**
+     * Dummy - We Don't Actually Read Anything
+     *
+     * @return string
+     */
+    public function read($id): string
+    {
+        return "";
+    }
+
+    /**
+     * Write - We Don't Actually Write Anything
+     *
+     * @param $id
+     * @param $data
+     *
+     * @return bool
+     */
+    public function write($id, $data): bool
+    {
+        return true;
+    }
 }
