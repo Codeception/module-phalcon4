@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Lib\Connector\Phalcon4;
 
 use Phalcon\Session\Adapter\AbstractAdapter;
+use Phalcon\Session\AdapterInterface;
 
 class MemorySession extends AbstractAdapter
 {
@@ -43,7 +46,7 @@ class MemorySession extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    public function start()
+    public function start(): bool
     {
         if ($this->status() !== PHP_SESSION_ACTIVE) {
             $this->memory = [];
@@ -60,7 +63,7 @@ class MemorySession extends AbstractAdapter
      *
      * @param array $options
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         if (isset($options['uniqueId'])) {
             $this->sessionId = $options['uniqueId'];
@@ -74,7 +77,7 @@ class MemorySession extends AbstractAdapter
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -87,7 +90,7 @@ class MemorySession extends AbstractAdapter
      * @param bool $remove
      * @return mixed
      */
-    public function get($index, $defaultValue = null, $remove = false)
+    public function get(string $index, $defaultValue = null, bool $remove = false)
     {
         $key = $this->prepareIndex($index);
 
@@ -110,7 +113,7 @@ class MemorySession extends AbstractAdapter
      * @param string $index
      * @param mixed $value
      */
-    public function set($index, $value)
+    public function set(string $index, $value): void
     {
         $this->memory[$this->prepareIndex($index)] = $value;
     }
@@ -121,7 +124,7 @@ class MemorySession extends AbstractAdapter
      * @param string $index
      * @return bool
      */
-    public function has($index)
+    public function has(string $index): bool
     {
         return isset($this->memory[$this->prepareIndex($index)]);
     }
@@ -131,7 +134,7 @@ class MemorySession extends AbstractAdapter
      *
      * @param string $index
      */
-    public function remove($index)
+    public function remove(string $index): void
     {
         unset($this->memory[$this->prepareIndex($index)]);
     }
@@ -141,7 +144,7 @@ class MemorySession extends AbstractAdapter
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->sessionId;
     }
@@ -151,7 +154,7 @@ class MemorySession extends AbstractAdapter
      *
      * @return bool
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return $this->started;
     }
@@ -164,12 +167,11 @@ class MemorySession extends AbstractAdapter
      * if ($session->status() !== PHP_SESSION_ACTIVE) {
      *     $session->start();
      * }
-     * ?>
      * ```
      *
      * @return int
      */
-    public function status()
+    public function status(): int
     {
         if ($this->isStarted()) {
             return PHP_SESSION_ACTIVE;
@@ -181,7 +183,7 @@ class MemorySession extends AbstractAdapter
     /**
      * @inheritdoc
      *
-     * @param bool $removeData
+     * @param bool $id
      * @return bool
      */
     public function destroy($id): bool
@@ -195,9 +197,9 @@ class MemorySession extends AbstractAdapter
      * @inheritdoc
      *
      * @param bool $deleteOldSession
-     * @return \Phalcon\Session\AdapterInterface
+     * @return AdapterInterface
      */
-    public function regenerateId($deleteOldSession = true)
+    public function regenerateId(bool $deleteOldSession = true): AdapterInterface
     {
         $this->sessionId = $this->generateId();
 
@@ -209,7 +211,7 @@ class MemorySession extends AbstractAdapter
      *
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -219,7 +221,7 @@ class MemorySession extends AbstractAdapter
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -229,7 +231,7 @@ class MemorySession extends AbstractAdapter
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return (array) $this->memory;
     }
@@ -240,7 +242,7 @@ class MemorySession extends AbstractAdapter
      * @param string $index
      * @return mixed
      */
-    public function __get($index)
+    public function __get(string $index)
     {
         return $this->get($index);
     }
@@ -251,7 +253,7 @@ class MemorySession extends AbstractAdapter
      * @param string $index
      * @param mixed $value
      */
-    public function __set($index, $value)
+    public function __set(string $index, $value): void
     {
         $this->set($index, $value);
     }
@@ -259,10 +261,10 @@ class MemorySession extends AbstractAdapter
     /**
      * Alias: Check whether a session variable is set in an application context
      *
-     * @param  string $index
+     * @param string $index
      * @return bool
      */
-    public function __isset($index)
+    public function __isset(string $index): bool
     {
         return $this->has($index);
     }
@@ -272,12 +274,12 @@ class MemorySession extends AbstractAdapter
      *
      * @param string $index
      */
-    public function __unset($index)
+    public function __unset(string $index): void
     {
         $this->remove($index);
     }
 
-    private function prepareIndex($index)
+    private function prepareIndex(string $index): string
     {
         if ($this->sessionId) {
             $key = $this->sessionId . '#' . $index;
@@ -291,9 +293,9 @@ class MemorySession extends AbstractAdapter
     /**
      * @return string
      */
-    private function generateId()
+    private function generateId(): string
     {
-        return md5(time());
+        return sha1((string) time());
     }
 
     /**

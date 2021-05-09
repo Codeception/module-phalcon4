@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Lib\Connector;
 
 use Closure;
@@ -9,13 +11,15 @@ use Phalcon\Di;
 use Phalcon\Http;
 use Phalcon\Mvc\Application;
 use Phalcon\Mvc\Micro as MicroApplication;
+use ReflectionException;
 use ReflectionProperty;
 use RuntimeException;
-use Symfony\Component\BrowserKit\AbstractBrowser as Client;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\BrowserKit\Response;
 
-class Phalcon4 extends Client
+class Phalcon4 extends AbstractBrowser
 {
     use PhpSuperGlobalsConverter;
 
@@ -30,7 +34,7 @@ class Phalcon4 extends Client
      *
      * @param mixed $application
      */
-    public function setApplication($application)
+    public function setApplication($application): void
     {
         $this->application = $application;
     }
@@ -43,10 +47,11 @@ class Phalcon4 extends Client
     public function getApplication()
     {
         $application = $this->application;
-
         if ($application instanceof Closure) {
             return $application();
-        } elseif (is_string($application)) {
+        }
+
+        if (is_string($application)) {
             /** @noinspection PhpIncludeInspection */
             return require $application;
         }
@@ -57,12 +62,11 @@ class Phalcon4 extends Client
     /**
      * Makes a request.
      *
-     * @param \Symfony\Component\BrowserKit\Request $request
+     * @param Request $request
      *
-     * @return \Symfony\Component\BrowserKit\Response
-     * @throws \RuntimeException
+     * @throws RuntimeException|ReflectionException
      */
-    public function doRequest($request)
+    public function doRequest($request): Response
     {
         $application = $this->getApplication();
         if (!$application instanceof Application && !$application instanceof MicroApplication) {
@@ -99,7 +103,7 @@ class Phalcon4 extends Client
             $_POST = $_REQUEST;
         }
 
-        parse_str($queryString, $output);
+        parse_str((string) $queryString, $output);
         foreach ($output as $k => $v) {
             $_GET[$k] = $v;
         }
@@ -125,12 +129,14 @@ class Phalcon4 extends Client
 
         $headersProperty = new ReflectionProperty($headers, 'headers');
         $headersProperty->setAccessible(true);
+
         $headers = $headersProperty->getValue($headers);
         if (!is_array($headers)) {
             $headers = [];
         }
 
         $cookiesProperty = new ReflectionProperty($di['cookies'], 'cookies');
+
         $cookiesProperty->setAccessible(true);
         $cookies = $cookiesProperty->getValue($di['cookies']);
         if (is_array($cookies)) {
@@ -156,7 +162,7 @@ class Phalcon4 extends Client
 
         return new Response(
             $response->getContent() ?: '',
-            $status ? $status : 200,
+            $status !== 0 ? $status : 200,
             $headers
         );
     }

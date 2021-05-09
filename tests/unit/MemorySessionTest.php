@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Lib\Connector\Phalcon4\MemorySession;
 use Codeception\Util\Autoload;
 
-class MemorySessionTest extends \Codeception\Test\Unit
+final class MemorySessionTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester

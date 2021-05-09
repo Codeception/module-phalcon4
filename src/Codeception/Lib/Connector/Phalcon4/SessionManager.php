@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Lib\Connector\Phalcon4;
 
 use Phalcon\Session\Manager;
