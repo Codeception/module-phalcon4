@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Module\Phalcon4;
 use Codeception\Exception\ModuleConfigException;
 
-class Phalcon4ModuleTest extends \Codeception\Test\Unit
+final class Phalcon4ModuleTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester

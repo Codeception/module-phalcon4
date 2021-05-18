@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Module;
 
 use Codeception\Configuration;
@@ -7,6 +9,7 @@ use Codeception\Exception\ModuleConfigException;
 use Codeception\Exception\ModuleException;
 use Codeception\Lib\Connector\Phalcon4 as PhalconConnector;
 use Codeception\Lib\Connector\Phalcon4\MemorySession as MemorySession;
+use Codeception\Lib\Connector\Phalcon4\SessionManager;
 use Codeception\Lib\Framework;
 use Codeception\Lib\Interfaces\ActiveRecord;
 use Codeception\Lib\Interfaces\PartedModule;
@@ -18,9 +21,9 @@ use Phalcon\Di;
 use Phalcon\Di\Injectable;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\Model as PhalconModel;
+use Phalcon\Mvc\ResultsetInterface;
 use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Mvc\RouterInterface;
-use Codeception\Lib\Connector\Phalcon4\SessionManager;
 use Phalcon\Url;
 
 /**
@@ -87,6 +90,9 @@ use Phalcon\Url;
  */
 class Phalcon4 extends Framework implements ActiveRecord, PartedModule
 {
+    /**
+     * @var array
+     */
     protected $config = [
         'bootstrap'  => 'app/config/bootstrap.php',
         'cleanup'    => true,
@@ -101,12 +107,14 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
 
     /**
      * Dependency injection container
+     *
      * @var DiInterface
      */
     public $di = null;
 
     /**
      * Phalcon Connector
+     *
      * @var PhalconConnector
      */
     public $client;
@@ -231,7 +239,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * @param string $key
      * @param mixed $val
      */
-    public function haveInSession($key, $val)
+    public function haveInSession(string $key, $val): void
     {
         $this->di->get('session')->set($key, $val);
         $this->debugSection('Session', json_encode($this->di['session']->getAdapter()->toArray()));
@@ -245,13 +253,12 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * <?php
      * $I->seeInSession('key');
      * $I->seeInSession('key', 'value');
-     * ?>
      * ```
      *
      * @param string $key
      * @param mixed $value
      */
-    public function seeInSession($key, $value = null)
+    public function seeInSession(string $key, $value = null): void
     {
         $this->debugSection('Session', json_encode($this->di['session']->getAdapter()->toArray()));
 
@@ -278,13 +285,12 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * <?php
      * $I->seeSessionHasValues(['key1', 'key2']);
      * $I->seeSessionHasValues(['key1' => 'value1', 'key2' => 'value2']);
-     * ?>
      * ```
      *
      * @param  array $bindings
      * @return void
      */
-    public function seeSessionHasValues(array $bindings)
+    public function seeSessionHasValues(array $bindings): void
     {
         foreach ($bindings as $key => $value) {
             if (is_int($key)) {
@@ -302,7 +308,6 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * <?php
      * $user_id = $I->haveRecord('App\Models\Users', ['name' => 'Phalcon']);
      * $I->haveRecord('App\Models\Categories', ['name' => 'Testing']');
-     * ?>
      * ```
      *
      * @param string $model Model name
@@ -352,7 +357,6 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * ``` php
      * <?php
      * $I->seeRecord('App\Models\Categories', ['name' => 'Testing']);
-     * ?>
      * ```
      *
      * @param string $model Model name
@@ -374,15 +378,14 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * ``` php
      * <?php
      * $I->seeNumberOfRecords('App\Models\Categories', 3, ['name' => 'Testing']);
-     * ?>
      * ```
      *
      * @param string $model Model name
      * @param int $number int number of records
-     * @param array  $attributes Model attributes
+     * @param array $attributes Model attributes
      * @part orm
      */
-    public function seeNumberOfRecords($model, $number, $attributes = [])
+    public function seeNumberOfRecords(string $model, int $number, array $attributes = []): void
     {
         $records = $this->findRecords($model, $attributes);
         if ($records->count() != $number) {
@@ -403,7 +406,6 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * ``` php
      * <?php
      * $I->dontSeeRecord('App\Models\Categories', ['name' => 'Testing']);
-     * ?>
      * ```
      *
      * @param string $model Model name
@@ -425,7 +427,6 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * ``` php
      * <?php
      * $category = $I->grabRecord('App\Models\Categories', ['name' => 'Testing']);
-     * ?>
      * ```
      *
      * @param string $model Model name
@@ -447,7 +448,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * @return mixed
      * @part services
      */
-    public function grabServiceFromContainer($service, array $parameters = [])
+    public function grabServiceFromContainer(string $service, array $parameters = [])
     {
         if (!$this->di->has($service)) {
             $this->fail("Service $service is not available in container");
@@ -466,7 +467,6 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * $filter = $I->addServiceToContainer('answer', function () {
      *      return rand(0, 1) ? 'Yes' : 'No';
      * }, true);
-     * ?>
      * ```
      *
      * @param string $name
@@ -475,12 +475,12 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * @return mixed|null
      * @part services
      */
-    public function addServiceToContainer($name, $definition, $shared = false)
+    public function addServiceToContainer(string $name, $definition, bool $shared = false)
     {
         try {
             $service = $this->di->set($name, $definition, $shared);
             return $service->resolve();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->fail($e->getMessage());
 
             return null;
@@ -493,13 +493,12 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * ``` php
      * <?php
      * $I->amOnRoute('posts.create');
-     * ?>
      * ```
      *
      * @param string $routeName
      * @param array  $params
      */
-    public function amOnRoute($routeName, array $params = [])
+    public function amOnRoute(string $routeName, array $params = []): void
     {
         if (!$this->di->has('url')) {
             $this->fail('Unable to resolve "url" service.');
@@ -522,11 +521,10 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * ``` php
      * <?php
      * $I->seeCurrentRouteIs('posts.index');
-     * ?>
      * ```
      * @param string $routeName
      */
-    public function seeCurrentRouteIs($routeName)
+    public function seeCurrentRouteIs(string $routeName): void
     {
         if (!$this->di->has('url')) {
             $this->fail('Unable to resolve "url" service.');
@@ -545,7 +543,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      *
      * @return \Phalcon\Mvc\Model
      */
-    protected function findRecord($model, $attributes = [])
+    protected function findRecord(string $model, array $attributes = [])
     {
         $this->getModelRecord($model);
         $conditions = [];
@@ -574,9 +572,9 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * @param string $model Model name
      * @param array $attributes Model attributes
      *
-     * @return \Phalcon\Mvc\ResultsetInterface
+     * @return ResultsetInterface
      */
-    protected function findRecords($model, $attributes = [])
+    protected function findRecords(string $model, array $attributes = [])
     {
         $this->getModelRecord($model);
         $conditions = [];
@@ -691,10 +689,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
         return array_unique($internalDomains);
     }
 
-    /**
-     * @return string
-     */
-    private function getApplicationDomainRegex()
+    private function getApplicationDomainRegex(): string
     {
         $server = ReflectionHelper::readPrivateProperty($this->client, 'server');
         $domain = $server['HTTP_HOST'];

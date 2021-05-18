@@ -7,6 +7,10 @@ A Codeception module for Phalcon4 framework
 [![Total Downloads](https://poser.pugx.org/codeception/module-phalcon4/downloads)](https://packagist.org/packages/codeception/module-phalcon4)
 [![License](https://poser.pugx.org/codeception/module-phalcon4/license)](/LICENSE)
 
+## Requirements
+
+* `PHP 7.2` or higher.
+
 ## Installation
 
 ```

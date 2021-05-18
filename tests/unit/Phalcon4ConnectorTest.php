@@ -6,7 +6,7 @@ use Codeception\Lib\Connector\Phalcon4 as PhalconConnector;
 use Codeception\Module\Phalcon4;
 use Symfony\Component\BrowserKit\Request;
 
-class Phalcon4ConnectorTest extends \Codeception\Test\Unit
+final class Phalcon4ConnectorTest extends \Codeception\Test\Unit
 {
     protected function getPhalconModule(): Phalcon4
     {
