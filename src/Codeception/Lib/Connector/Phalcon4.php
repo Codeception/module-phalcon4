@@ -149,7 +149,7 @@ class Phalcon4 extends AbstractBrowser
                     $clientCookie = new Cookie(
                         $name,
                         $valueProperty->getValue($cookie),
-                        $cookie->getExpiration(),
+                        (string)$cookie->getExpiration(),
                         $cookie->getPath(),
                         $cookie->getDomain(),
                         $cookie->getSecure(),
