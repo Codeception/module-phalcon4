@@ -226,7 +226,7 @@ class Phalcon4 extends Framework implements ActiveRecord, PartedModule
      * Provides access the Phalcon application object.
      *
      * @see \Codeception\Lib\Connector\Phalcon::getApplication
-     * @return \Phalcon\Application|\Phalcon\Mvc\Micro
+     * @return \Phalcon\Mvc\Application|\Phalcon\Mvc\Micro
      */
     public function getApplication()
     {
