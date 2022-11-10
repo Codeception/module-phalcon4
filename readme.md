@@ -9,7 +9,7 @@ A Codeception module for Phalcon4 framework
 
 ## Requirements
 
-* `PHP 7.2` or higher.
+* `PHP 7.2` or higher duh.
 
 ## Installation
 
